@@ -1,37 +1,45 @@
 import { useEffect, useState } from "react";
+import { PostForm } from "../PostForm/PostForm";
+import { Post } from "../Post/Post";
 
-type PostType = {
+export type PostType = {
   id: number;
   title: string;
 };
 
-export const Post = () => {
+export const PostList = () => {
   const [posts, setPosts] = useState<PostType[]>([]);
 
   const getPosts = async () => {
     try {
-      const response = await fetch("https://dummyjson.com/posts");
-      if (!response.ok) throw new Error("Cannot fetch posts!");
+      const res = await fetch("https://dummyjson.com/posts");
 
-      const { posts } = await response.json();
+      if (!res.ok) throw new Error("Cannot fetch posts!");
+
+      const { posts } = await res.json();
+
       if (posts) setPosts(posts);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const addPost = (post: PostType) => setPosts((prev) => [...prev, post]);
+
   useEffect(() => {
     getPosts();
   }, []);
-  return posts.length === 0 ? (
-    <ul>
-      {posts.map((post) => (
-        <li key={post.id}>
+
+  return posts.length > 0 ? (
+    <>
+      <PostForm addPost={addPost} />
+      <ul>
+        {posts.map((post) => (
           <Post key={post.id} {...post} />
-        </li>
-      ))}
-    </ul>
+        ))}
+      </ul>
+    </>
   ) : (
-    "Brak informacji o postach"
+    <h1>"Brak informacji o postach"</h1>
   );
 };

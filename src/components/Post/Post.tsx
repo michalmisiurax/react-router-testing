@@ -4,5 +4,5 @@ type Props = {
 };
 
 export const Post = ({ id, title }: Props) => (
-  <li> {`id: ${id}, tytuł: ${title}`}</li>
+  <li>{`id: ${id}, tytuł: ${title}`}</li>
 );
